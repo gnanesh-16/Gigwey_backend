@@ -5,6 +5,11 @@ import json
 import shutil
 from werkzeug.utils import secure_filename
 from new_ import PreciseActionRecorder
+from pyvirtualdisplay import Display
+
+# Start virtual display
+display = Display(visible=0, size=(1920, 1080))
+display.start()
 
 app = Flask(__name__, template_folder='templates')
 recorder = PreciseActionRecorder()
@@ -352,3 +357,4 @@ class PreciseActionRecorder:
 
 if __name__ == '__main__':
     app.run(debug=True)
+    display.stop()  # Stop virtual display when app stops

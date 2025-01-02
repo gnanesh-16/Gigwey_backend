@@ -1,4 +1,5 @@
 Flask
 pyautogui
 pynput
-typing 
+typing
+pyvirtualdisplay
