@@ -27,7 +27,7 @@ class PreciseActionRecorder:
 
     def __init__(
         self, 
-        log_dir: str = os.path.join('C:/Users/HP/Desktop/t1/asim/appwrite', 'user_action_logs'), 
+        log_dir: str = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'user_action_logs'), 
         max_events: int = 50000, 
         record_keyboard: bool = True,
         speed_multiplier: float = 5.0  # Remove configuration file support

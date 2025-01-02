@@ -348,9 +348,10 @@ def delete_recording():
 
 class PreciseActionRecorder:
     def __init__(self):
-        self.log_dir = 'path_to_log_directory'
+        self.log_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'user_action_logs')
         self.recording = False
         self.paused = False
+        os.makedirs(self.log_dir, exist_ok=True)
 
     def list_recordings(self):
         """List all recordings in the log directory, sorted in descending order"""
