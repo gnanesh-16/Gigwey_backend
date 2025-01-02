@@ -357,5 +357,5 @@ class PreciseActionRecorder:
         return sorted([f for f in os.listdir(self.log_dir) if f.endswith('.json')], reverse=True)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0',port=5000,debug=True)
     display.stop()  # Stop virtual display when app stops
