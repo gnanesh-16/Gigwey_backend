@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Action Recorder</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .controls {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
+        .recordings-list {
+            margin-top: 20px;
+        }
+        .recording-item {
+            cursor: pointer;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .recording-item.selected {
+            background-color: #e9ecef;
+            border-color: #007bff;
+        }
+        .danger {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+        }
+        .danger:disabled {
+            background-color: #f5c6cb;
+            cursor: not-allowed;
+        }
+        button:not(.danger) {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .recording { background-color: red; }
+        .paused { background-color: orange; }
+        .stopped { background-color: gray; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Action Recorder</h1>
+        
+        <div class="button-group primary-controls">
+            <button id="startBtn" class="btn primary">
+                <span class="status-indicator stopped"></span>
+                Start Recording
+            </button>
+            <button id="pauseBtn" class="btn" disabled>Pause</button>
+            <button id="stopBtn" class="btn" disabled>Stop</button>
+            <button id="refreshBtn" class="btn">Refresh List</button>
+        </div>
+
+        <div class="button-group replay-controls">
+            <div class="replay-options">
+                <label>
+                    <input type="checkbox" id="precisionMode" checked>
+                    Precision Mode
+                </label>
+                <label>
+                    Speed:
+                    <select id="replaySpeed">
+                        <option value="0.5">0.5x</option>
+                        <option value="1.0" selected>1.0x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2.0">2.0x</option>
+                    </select>
+                </label>
+                <label>
+                    Loop Count:
+                    <input type="number" id="loopCount" min="1" max="10" value="1">
+                </label>
+            </div>
+            <button id="replayBtn" class="btn" disabled>Replay Selected</button>
+            <button id="deleteBtn" class="btn danger" disabled>Delete Selected</button>
+        </div>
+
+        <div class="button-group file-controls">
+            <button id="exportBtn" class="btn">Export Selected</button>
+            <button id="importBtn" class="btn">Import Recording</button>
+            <input type="file" id="importInput" accept=".json" style="display: none">
+        </div>
+
+        <div class="search-controls">
+            <input type="text" id="searchInput" placeholder="Search recordings...">
+            <select id="categoryFilter">
+                <option value="">All Categories</option>
+                <option value="general">General</option>
+                <option value="testing">Testing</option>
+                <option value="automation">Automation</option>
+            </select>
+        </div>
+
+        <div class="batch-controls">
+            <button id="selectAllBtn" class="btn">Select All</button>
+            <button id="deselectAllBtn" class="btn">Deselect All</button>
+            <button id="categoryBtn" class="btn">Set Category</button>
+        </div>
+
+        <div id="status" class="status-message"></div>
+        <div id="recordingsList" class="recordings-list"></div>
+        <button id="delete-selected" style="background-color: red; color: white;">Delete Selected Recording</button>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        document.getElementById('delete-selected').addEventListener('click', function() {
+            const selectedRecording = document.querySelector('input[name="recording"]:checked').value;
+            if (selectedRecording) {
+                fetch('/delete_recording', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ recording: selectedRecording })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.status === 'success') {
+                        location.reload();
+                    }
+                });
+            } else {
+                alert('Please select a recording to delete.');
+            }
+        });
+
+        document.getElementById('deleteBtn').addEventListener('click', function() {
+            const selectedRecording = document.querySelector('input[name="recording"]:checked').value;
+            if (selectedRecording) {
+                fetch('/delete_recording', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ recording: selectedRecording })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.status === 'success') {
+                        location.reload();
+                    }
+                });
+            } else {
+                alert('Please select a recording to delete.');
+            }
+        });
+
+        // Enable delete button when a recording is selected
+        document.querySelectorAll('input[name="recording"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('deleteBtn').disabled = !this.checked;
+            });
+        });
+    </script>
+</body>
+</html>

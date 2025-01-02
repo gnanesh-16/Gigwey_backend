@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Precise Action Recorder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Precise Action Recorder</h1>
+
+        <div class="control-panel">
+            <div class="record-section">
+                <h2>Recording Controls</h2>
+                <button id="startRecording" class="btn">Start Recording</button>
+                <button id="stopRecording" class="btn" disabled>Stop Recording</button>
+                <p class="info">Press 'Esc' to stop or 'P' to pause/resume recording</p>
+            </div>
+
+            <div class="replay-section">
+                <h2>Recordings</h2>
+                <button id="listRecordings" class="btn">List Recordings</button>
+                <div id="recordingsList" class="recordings-list"></div>
+
+                <div class="replay-controls">
+                    <label>
+                        <input type="checkbox" id="precisionMode" checked>
+                        Enable Precise Timing
+                    </label>
+                    <div class="loop-control">
+                        <label for="loopCount">Loop Count (0-10):</label>
+                        <input type="number" id="loopCount" min="0" max="10" value="0">
+                    </div>
+                    <button id="replaySelected" class="btn" disabled>Replay Selected</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="status" class="status-message"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
