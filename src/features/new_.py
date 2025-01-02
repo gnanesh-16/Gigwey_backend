@@ -1,3 +1,9 @@
+from pyvirtualdisplay import Display
+
+# Start virtual display
+display = Display(visible=0, size=(1920, 1080))
+display.start()
+
 import time
 import os
 import json
@@ -589,6 +595,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+    display.stop()  # Stop virtual display when script ends
 
 """
 Features:

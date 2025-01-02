@@ -1,3 +1,9 @@
+from pyvirtualdisplay import Display
+
+# Start virtual display
+display = Display(visible=0, size=(1920, 1080))
+display.start()
+
 from flask import Flask, render_template, jsonify, request, Response, send_file
 import os
 import threading
@@ -5,11 +11,6 @@ import json
 import shutil
 from werkzeug.utils import secure_filename
 from new_ import PreciseActionRecorder
-from pyvirtualdisplay import Display
-
-# Start virtual display
-display = Display(visible=0, size=(1920, 1080))
-display.start()
 
 app = Flask(__name__, template_folder='templates')
 recorder = PreciseActionRecorder()
