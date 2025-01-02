@@ -1,4 +1,4 @@
 Flask
 pyautogui
 pynput
-typings
+typing
