@@ -13,15 +13,21 @@
         <div class="control-panel">
             <div class="record-section">
                 <h2>Recording Controls</h2>
-                <button id="startRecording" class="btn">Start Recording</button>
-                <button id="stopRecording" class="btn" disabled>Stop Recording</button>
+                <button id="startRecording" class="btn" onclick="startRecording()">Start Recording</button>
+                <button id="stopRecording" class="btn" onclick="stopRecording()" disabled>Stop Recording</button>
                 <p class="info">Press 'Esc' to stop or 'P' to pause/resume recording</p>
             </div>
 
             <div class="replay-section">
                 <h2>Recordings</h2>
-                <button id="listRecordings" class="btn">List Recordings</button>
-                <div id="recordingsList" class="recordings-list"></div>
+                <button id="listRecordings" class="btn" onclick="refreshList()">List Recordings</button>
+                <div id="recordingsList" class="recordings-list">
+                    <ul id="recordings">
+                        {% for recording in recordings %}
+                        <li>{{ recording }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
 
                 <div class="replay-controls">
                     <label>

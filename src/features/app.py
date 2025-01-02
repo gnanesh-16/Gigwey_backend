@@ -1,16 +1,19 @@
-from pyvirtualdisplay import Display
-
-# Start virtual display
-display = Display(visible=0, size=(1920, 1080))
-display.start()
-
-from flask import Flask, render_template, jsonify, request, Response, send_file
 import os
+import sys
 import threading
 import json
-import shutil
+from flask import Flask, render_template, jsonify, request, Response, send_file
 from werkzeug.utils import secure_filename
-from new_ import PreciseActionRecorder
+
+# Import PreciseActionRecorder based on platform
+if sys.platform == 'win32':
+    from new_ import PreciseActionRecorder
+else:
+    # Only use virtual display on non-Windows systems
+    from pyvirtualdisplay import Display
+    display = Display(visible=0, size=(1920, 1080))
+    display.start()
+    from new_ import PreciseActionRecorder
 
 app = Flask(__name__, template_folder='templates')
 recorder = PreciseActionRecorder()
@@ -346,17 +349,9 @@ def delete_recording():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
 
-class PreciseActionRecorder:
-    def __init__(self):
-        self.log_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'user_action_logs')
-        self.recording = False
-        self.paused = False
-        os.makedirs(self.log_dir, exist_ok=True)
-
-    def list_recordings(self):
-        """List all recordings in the log directory, sorted in descending order"""
-        return sorted([f for f in os.listdir(self.log_dir) if f.endswith('.json')], reverse=True)
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
-    display.stop()  # Stop virtual display when app stops
+    try:
+        app.run(host='0.0.0.0', debug=True)
+    finally:
+        if sys.platform != 'win32':
+            display.stop()

@@ -1,5 +1,6 @@
-Flask
-pyautogui
-pynput
-typing
-pyvirtualdisplay
+Flask==2.0.1
+pyautogui==0.9.53
+pynput==1.7.6
+typing==3.7.4.3
+Werkzeug==2.0.1
+pyvirtualdisplay; platform_system != "Windows"

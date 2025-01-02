@@ -1,8 +1,10 @@
-from pyvirtualdisplay import Display
+import sys
 
-# Start virtual display
-display = Display(visible=0, size=(1920, 1080))
-display.start()
+# Only import virtual display on non-Windows systems
+if sys.platform != 'win32':
+    from pyvirtualdisplay import Display
+    display = Display(visible=0, size=(1920, 1080))
+    display.start()
 
 import time
 import os
@@ -595,7 +597,8 @@ def main():
 
 if __name__ == "__main__":
     main()
-    display.stop()  # Stop virtual display when script ends
+    if sys.platform != 'win32':
+        display.stop()
 
 """
 Features:
